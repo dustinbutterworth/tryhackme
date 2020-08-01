@@ -1,0 +1,188 @@
+# Find interesting-file.txt
+PS C:\> gci -Path "C:\" -Filter "*interesting-file.txt*" -recurse -force -ErrorAction SilentlyContinue
+PS C:\> gci -Path "C:\" -Include *interesting-file.txt* -recurse -force -ErrorAction SilentlyContinue
+
+# Output
+PS C:\> type '.\Program Files\interesting-file.txt.txt'
+notsointerestingcontent
+
+# How many cmdlets installed
+PS C:\> get-command -CommandType Cmdlet | measure-object
+
+
+Count    : 6638
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :
+
+# Also:
+PS C:\> get-command -CommandType Cmdlet | measure-object | select-object -property Count
+
+Count
+-----
+ 6638
+
+
+# Get file has of interesting file
+PS C:\> Get-FileHash -Algorithm MD5 '.\Program Files\interesting-file.txt.txt'
+
+Algorithm       Hash                                                                   Path
+---------       ----                                                                   ----
+MD5             49A586A2A9456226F8A1B4CEC6FAB329                                       C:\Program Files\interesting-file.txt.txt
+
+
+# Current working dir:
+Get-Location
+
+# File exist?
+PS C:\> Test-Path "C:\Users\Administrator\Documents\Passwords"
+False
+
+# Base64 decode:
+$sEncodedString="dGhpcyBpcyB0aGUgZmxhZyAtIGlob3BleW91ZGlkdGhpc29ud2luZG93cwp0aGUgcmVzdCBpcyBnYXJiYWdlCnRoZSByZXN0IGlzIGdhcmJhZ2UKdGhlIHJlc3QgaXMgZ2FyYmFnZQp0aGUgcmVzdCBpcyBnYXJiYWdlCnRoZSByZXN0IGlzIGdhcmJhZ2UKdGhlIHJlc3QgaXMgZ2FyYmFnZQp0aGUgcmVzdCBpcyBnYXJiYWdlCnRoZSByZXN0IGlzIGdhcmJhZ2U
+KdGhlIHJlc3QgaXMgZ2FyYmFnZQp0aGUgcmVzdCBpcyBnYXJiYWdlCnRoZSByZXN0IGlzIGdhcmJhZ2UKdGhlIHJlc3QgaXMgZ2FyYmFnZQp0aGUgcmVzdCBpcyBnYXJiYWdlCnRoZSByZXN0IGlzIGdhcmJhZ2U="
+
+$sDecodedString=[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($sEncodedString))
+write-host "Encoded String:" $sDecodedString
+
+
+
+# Enumeration!
+# How many users are there?
+Get-Localuser
+
+# Find user by sid:
+PS C:\> Get-Localuser -SID S-1-5-21-1394777289-3961777894-1791813945-501
+
+Name  Enabled Description
+----  ------- -----------
+Guest False   Built-in account for guest access to the computer/domain
+
+
+# Which users have password required?
+PS C:\> Get-LocalUser | select-object -Property Name,PasswordRequired
+
+Name           PasswordRequired
+----           ----------------
+Administrator              True
+DefaultAccount            False
+duck                      False
+duck2                     False
+Guest                     False
+
+# How many local groups are there?
+PS C:\> Get-LocalGroup | measure-object
+
+
+Count    : 24
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :
+
+
+# IP address info:
+Get-NetIPAddress
+
+
+# How many ports listening?
+PS C:\> Get-NetTCPConnection | where-object {$_.State -eq 'Listen'} | measure-object
+
+
+Count    : 20
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :
+
+
+# How many patches applied?
+PS C:\> Get-HotFix | measure-object
+
+
+Count    : 20
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :
+
+
+# When was specific hotfix applied:
+PS C:\> Get-HotFix | where-object {$_.HotFixId -eq 'KB4023834'}
+
+Source        Description      HotFixID      InstalledBy          InstalledOn
+------        -----------      --------      -----------          -----------
+EC2AMAZ-5M... Update           KB4023834     EC2AMAZ-5M13VM2\A... 6/15/2017 12:00:00 AM
+
+
+# Find backup file 
+PS C:\Users\Administrator> gci -Path "C:\" -Include *.bak* -File -Exclude brndlog.bak -recurse -force -ErrorAction SilentlyContinue
+
+
+    Directory: C:\Program Files (x86)\Internet Explorer
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        10/4/2019  12:42 AM             12 passwords.bak.txt
+
+
+# Search for string in file:
+PS C:\Users\Administrator> gci -Path "C:\Users" -Recurse | Select-String -pattern "api_key"
+C:\Users\Public\Music\config.xml:1:API_KEY=fakekey123
+
+
+#searching for backup file:
+PS C:\> gci -Path "C:\" -Include *.bak,*back* -Exclude brndlog.bak,*.py,*traceback*,*fallback*,*backport*,*-ms,*.lnk,*feedback*,*background*,*.xml -recurse -force -ErrorAction SilentlyContinue
+
+showed a bunch of results, saw this:
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----        9/11/2019   9:52 AM                Backup
+
+
+# What is the path of the scheduled task called new-sched-task?
+PS C:\Windows\WinSxS> Get-ScheduledTask | where-object {$_.TaskName -eq 'new-sched-task'}
+
+TaskPath                                       TaskName                          State
+--------                                       --------                          -----
+\                                              new-sched-task                    Ready
+
+
+# Get Owner of File:
+PS C:\Windows\WinSxS> get-acl C:\
+
+
+    Directory:
+
+
+Path Owner                       Access
+---- -----                       ------
+C:\  NT SERVICE\TrustedInstaller CREATOR OWNER Allow  268435456...
+
+
+# Script writing
+$path = "C:\Users\Administrator\Desktop\emails"
+$string1 = "password"
+$string2 = "https"
+$command = gci -Path $path -Recurse | Select-String -pattern $string1,$string2
+
+echo $command
+
+
+
+#Port scanner script:
+$listports = 130..140
+$target_host = "localhost"
+#$command = Test-NetConnection -Port $port -ComputerName $target_host | foreach {$_.TcpTestSucceeded}
+
+foreach ($port in $listports){
+    $command = Test-NetConnection -WarningAction SilentlyContinue -Port $port -ComputerName $target_host | foreach {$_.TcpTestSucceeded}
+    echo "Port ${port}: ${command}"
+}
+
